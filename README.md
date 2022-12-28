@@ -303,7 +303,7 @@ android {
     ndk {
       moduleName "ndkdemotest-jni"
       # abiFilters "armeabi", "armeabi-v7a", "x86"
-      abiFilters "armeabi-v7a"
+      abiFilters "x86", "arm64-v8a"
     }
 
   }
