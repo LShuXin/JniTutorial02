@@ -661,13 +661,11 @@ PS:这里注意一点就是：Instant Run 与使用原生的项目不兼容
 
 其实没关系的，CMake也提供这样的功能的，现在我们就回到上面的第一个demo中，删除和NDK的有关的所有代码，删除后其目录如下：
 
- 
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image025.png)
 
-新目录.png
+![img](img/clip_image025.png)
 
-**(****一****)** **创建源文件**
+**(一)创建源文件**
 
 即在main目录下新建一个目录，我们就叫cpp好了。然后在该目录下创建一个C++ Source File(右键点击您刚刚创建的目录，然后选择 New > C/C++ Source File)。我们将其命名为native-lib。
 
@@ -675,9 +673,11 @@ PS:这里注意一点就是：Instant Run 与使用原生的项目不兼容
 
  
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image026.png)
+![img](img/clip_image026.png)
 
-**(****二****)** **创建****CMake****构建脚本**
+
+
+**(二)创建CMake构建脚本**
 
 因为目前这个项目没有CMake的构建脚本，所以咱们需要自行创建一个并包含适当的CMake命令。CMake构建脚本是一个纯文本的文件，而且这个名字必须是是**CMakeLists.txt**
 
@@ -685,8 +685,8 @@ PS:这里注意一点就是：Instant Run 与使用原生的项目不兼容
 
 ·    1、从Android Studio左侧打开Project窗格并从下拉菜单中选择Project视图。
 
-·    2、右键点击 模块的根目录并选择 New——> File。
- PS：这个位置不是不固定的，位置可以随意，但是配置构建脚本时，需要将这个位置写入构建脚本
+·    2、右键点击模块的根目录并选择 New——> File。
+     PS：这个位置不是不固定的，位置可以随意，但是配置构建脚本时，需要将这个位置写入构建脚本
 
 ·    3、输入CMakeLists.txt作为文件并点击OK
 
@@ -694,202 +694,175 @@ PS:这里注意一点就是：Instant Run 与使用原生的项目不兼容
 
  
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image027.png)
+![img](img/clip_image027.png)
 
-**(****三****)** **向****CMake****脚本文件写入数据**
+**(三)向CMake脚本文件写入数据**
 
 这块上面讲解了过了，就不详细说明了，内容如下：
 
-cmake_minimum_required(VERSION 3.4.1)
+```
+# For more information about using CMake with Android Studio, read the
+# documentation: https://d.android.com/studio/projects/add-native-code.html
 
- 
+# Sets the minimum version of CMake required to build the native library.
 
-add_library( # Sets the name of the library. 
+cmake_minimum_required(VERSION 3.18.1)
 
-​       native-lib
+# Declares and names the project.
 
-​       \# Sets the library as a shared library.
+project("ndkdemocmakehandy")
 
-​       SHARED
+# Creates and names a library, sets it as either STATIC
+# or SHARED, and provides the relative paths to its source code.
+# You can define multiple libraries, and CMake builds them for you.
+# Gradle automatically packages shared libraries with your APK.
 
-​       \# Provides a relative path to your source file(s). 
+add_library( # Sets the name of the library.
+        ndkdemocmakehandy
 
-​       src/main/cpp/native-lib.cpp )
+        # Sets the library as a shared library.
+        SHARED
 
- 
+        # Provides a relative path to your source file(s).
+        native-lib.cpp)
 
-find_library( # Defines the name of the path variable that stores the
+# Searches for a specified prebuilt library and stores the path as a
+# variable. Because CMake includes system libraries in the search path by
+# default, you only need to specify the name of the public NDK library
+# you want to add. CMake verifies that the library exists before
+# completing its build.
 
-​       \# location of the NDK library.
+find_library( # Sets the name of the path variable.
+        log-lib
 
-​       log-lib
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        log)
 
- 
-
-​       \# Specifies the name of the NDK library that
-
-​       \# CMake needs to locate.
-
-​       log )
-
-​       
-
- 
+# Specifies libraries CMake should link to your target library. You
+# can link multiple libraries, such as libraries you define in this
+# build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
+        ndkdemocmakehandy
 
-​            native-lib
+        # Links the target library to the log library
+        # included in the NDK.
+        ${log-lib})
+```
 
- 
 
-​            \# Links the log library to the target library.
 
-​            ${log-lib} )
+**(四)向Gradle关联到原生库**
 
-**(****四****)** **向****Gradle** **关联到原生库**
+要将Gradle关联到原生库，需要提供一个指向CMake脚本文件的路径。在构建应用时，Gradle会以依赖项的形式运行CMake，并将共享的库打包到APK中。Gradle还是用构建脚本来了解将那些文件添加到Android 项目中。如果原生文件还没有构建脚本，需要创建CMake构建脚本
 
-要将Gradle关联到原生库，需要提供一个指向CMake或ndk-build 脚本文件的路径。在构建应用时，Gradle会以依赖项的形式运行CMake或ndk-build，并将共享的库打包到APK中。Gradle还是用构建脚本来了解将那些文件添加到Android 项目中。
- 如果原生文件还没有构建脚本，需要创建CMake构建脚本
-
-关于 关联到原生库有两种方式，一种是通过Android Studio，一种是手动，其实其背后的东西是一致的，我们就一一来说明
-
-**1****、通过****Android Studio** **实现**
-
-·    1、从IDE 左侧打开Project 窗格 并选择 Android 视图
-
-·    2、右键点击想要关联到原生库的模块(咱们这里是**app** 模块)，并从菜单中选择 Link C++ Project with Gradle。如下图
-
-·    3、在下拉菜单中选择**CMake**。使用**Project Pat**来为外部的CMake项目指定刚刚的``CMakeLists.txt`脚本文件
-
-·    4、点击OK。
-
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image028.png)
-
-Link C++ Project with Gradle.png
-
-**2****、手动实现**
-
-要手动配置Gradle 以关联到原生库，需要将externalNativeBuild{} 块添加到模块级 build.gradle 文件中，并使用cmake {}对其进行配置
+手动配置Gradle以关联到原生库，需要将externalNativeBuild{} 块添加到模块级 build.gradle 文件中
 
 代码如下：
 
-apply plugin: 'com.android.application'
-
- 
-
-android {
-
-  compileSdkVersion 26
-
-  defaultConfig {
-
-​    applicationId "gebilaolitou.ndkdemo"
-
-​    minSdkVersion 19
-
-​    targetSdkVersion 26
-
-​    versionCode 1
-
-​    versionName "1.0"
-
-​    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
- 
-
-  }
-
- 
-
-  buildTypes {
-
-​    release {
-
-​      minifyEnabled false
-
-​      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-​     }
-
- 
-
-  }
-
- 
-
-  externalNativeBuild {
-
-​    cmake {
-
-​      path 'CMakeLists.txt'
-
-​    }
-
-  }
-
+```
+plugins {
+    id 'com.android.application'
 }
 
-**(****五****)** **编写****native-lib.cpp**
+android {
+    namespace 'com.lsx.ndkdemocmakehandy'
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.lsx.ndkdemocmakehandy"
+        minSdk 29
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.18.1'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.navigation:navigation-fragment:2.4.1'
+    implementation 'androidx.navigation:navigation-ui:2.4.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
+```
+
+
+
+**(五)编写native-lib.cpp**
 
 这块很简单，内容如下：
 
-\#include <jni.h>
+```
+//
+// Created by apple on 2022/12/30.
+//
 
-\#include <string>
-
- 
+#include <jni.h>
+#include <string>
 
 extern "C"
 
-JNIEXPORT jstring
-
- 
-
-JNICALL
-
-Java_gebilaolitou_ndkdemo_NDKTools_getStringFromNDK(
-
-​    JNIEnv *env, jobject /* this */) {
+JNIEXPORT jstring JNICALL Java_com_lsx_ndkdemocmakehandy_NDKTools_getStringFromNDK(JNIEnv *env, jobject obj) {
 
   std::string hello = "(*^__^*) 嘻嘻……~Hello from C++ 隔壁老李头";
 
   return env->NewStringUTF(hello.c_str());
-
 }
+```
+
+
 
 然后在NDKTools.java添加引用，如下：
 
-package gebilaolitou.ndkdemo;
-
- 
-
- 
+```
+package com.lsx.ndkdemocmakehandy;
 
 public class NDKTools {
-
- 
-
-  static {
-
-​    System.loadLibrary("native-lib");
-
-  }
-
- 
-
-  public static native String getStringFromNDK();
-
+    static {
+        System.loadLibrary("ndkdemocmakehandy");
+    }
+    public static native String getStringFromNDK();
 }
 
- 
+```
+
+
 
 然后直接运行，即可，结果如下：
 
  
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image029.png)
+![img](img/clip_image029.png)
 
-结果3.png
+
 
 **八、使用experimental-plugin插件简介**
 
