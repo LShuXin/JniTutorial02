@@ -401,38 +401,25 @@ Android.useDeprecatedNdk=true
 
 **五、通过CMake工具demo演示流程**
 
-**(****一****)** **首先确保你本地有****CMake****，我们来看下****SDK Tools**
+**(一)首先确保你本地有CMake，我们来看下SDK Tools**
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image016.png)
+![img](img/clip_image016.png)
 
- 
+ 可以看到上图中已经安装了cmake
 
-上面看到第三个 CMake 我本地没有，所以我要进行安装
 
-**(****二****)** **勾选****Include C++ Support****复选框。**
 
-在向导的 Configure your new project 部分，选中 Include C++ Support 复选框。
- 如下图
+**(二)选择Native C++类型项目**
 
- 
+![](img/clip_image017.png)
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image017.png)
 
-勾选.png
 
-这里有个坑，就是有好多同学说我没有这个Include C++ Support复选框，这是因为Android Studio设计的**"bug"**，你把这个对话框进行拉大，就出现了，因为一般的Android 项目用不到，所以在设计这个的时候，如果不特意的拉大，就选择性的"隐藏"了,太JB坑了。
-
-然后一直下一步，直到Customize C++ Support部分
-
-**(****三****)** **Customize C++ Support****的自定义项目**
+**(三) Customize C++ Support的自定义项目**
 
 如下：
 
- 
-
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image018.png)
-
-模式.png
+![clip_image018](img/clip_image018.png) 
 
 里面有个三个项目
 
@@ -444,68 +431,56 @@ Android.useDeprecatedNdk=true
 
 最后点击 Finish。
 
-**(****四****)** **检查** **Android** **目录**
+**(四)** **检查Android目录**
 
-在Android Studio 完成新项目的创建后，请从IDE左侧打开Project 矿口并选择Android 视图。如下图所示，Android Studio 将添加cpp和External Build Files 组：
+在Android Studio 完成新项目的创建后，请从IDE左侧打开Project 矿口并选择Android 视图。如下图所示，Android Studio 将添加cpp:
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image019.png)
+![clip_image019](img/clip_image019.png)
 
-Android模式.png
+
 
 该图为开发者的原生源文件和外部构建脚本的Android 视图组。
 
 PS：(此视图无法反应磁盘上的实际文件层次结构，而是将相似文件分到一组中，简化项目导航)。如果为Project模式则如下：
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image020.png)
-
-Project模式.png
+![clip_image020](img/clip_image020.png)
 
 那我们简单介绍下这两个多出来的文件夹：
 
 ·    在 **cpp** 文件夹中：可以找到属于项目的所有原生源文件等构建库。对于新项目，Android Studio会创建一个示例C++源文件 native-lib.cpp，并将其置于应用模块src/main/cpp/目录中。这个示例代码提供了一个简单的C++函数stringFromJNI()，此函数可以返回字符串**“Hello from C++”**
 
-·    在 **External Build Files** 文件夹中：可以找到CMake或 ndk-build 的构建脚本。与build.gradle文件指示Gradle构建应用一样，CMake和ndk-build需要一个构建脚本来了解如何构原生库。对于新项目，Android Studio 会创建一个CMake 构建脚本CMakeLists.txt，并将其置于模块根目录中。
 
-**(****五****)** **直接运行项目**
+
+**(五)直接运行项目**
 
 我们来直接 run一下这个项目，看下结果
 
- 
+![](img/clip_image021.png)
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image021.png)
-
-结果1.png
-
-**(****六****)** **修改****native-lib.cpp**
+**(六) 修改native-lib.cpp**
 
 这时候我们修改下native-lib.cpp，native-lib.cpp内容如下：
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image022.png)
+![](img/clip_image022.png)
 
-native-lib.cpp内容.png
+
 
 再直接run一下项目，看下结果。如下：
 
- 
-
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image023.png)
-
-结果2.png
+![clip_image023](img/clip_image023.png)
 
 
 
 
 我们看到对应的文字已经修改了
 
-**六、****CMake****工具****demo****的背后原理**
+**六、CMake工具的背后原理**
 
 我们看打了，我们什么都没做，就自动实现了C++的实现，它的背后原理是什么那？我们大家就思考一下？
 
-**(****一****)CMake****的入口**
+**(一)CMake的入口**
 
 它既然可以跑起来，一定有一个入口，那这个入口在哪里那?
-
- 
 
 先和大家说下我是怎么想象的，首先我们在点击Android Studio中的run按钮的时候，它是执行Gradle来进行打包的，所以说关于CMake的是怎么植入进去的，一定在项目的build.gradle，有相应的入口。
 
@@ -513,305 +488,162 @@ native-lib.cpp内容.png
 
 那我们就来看下它的build.gradle里面的代码，如下：
 
-apply plugin: 'com.android.application'
-
- 
-
-android {
-
-  compileSdkVersion 26
-
-  defaultConfig {
-
-​    applicationId "gebilaolitou.cmakendkdemo"
-
-​    minSdkVersion 23
-
-​    targetSdkVersion 26
-
-​    versionCode 1
-
-​    versionName "1.0"
-
-​    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-​    externalNativeBuild {
-
-​      cmake {
-
-​        cppFlags ""
-
-​      }
-
-​     }
-
-  }
-
-  buildTypes {
-
-​    release {
-
-​      minifyEnabled false
-
-​      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-​    }
-
-  }
-
-  externalNativeBuild {
-
-​    cmake {
-
-​      path "CMakeLists.txt"
-
-​    }
-
-  }
-
+```
+plugins {
+    id 'com.android.application'
 }
 
- 
+android {
+    namespace 'com.lsx.ndkdemocmake'
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.lsx.ndkdemocmake"
+        minSdk 29
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.18.1'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
 
 dependencies {
 
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-  implementation 'com.android.support:appcompat-v7:26.1.0'
-
-  implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-
-  testImplementation 'junit:junit:4.12'
-
-  androidTestImplementation 'com.android.support.test:runner:1.0.1'
-
-  androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
+```
+
+
 
 和我们平时搭建的项目差不多，就是多出来一块内容，**externalNativeBuild**。那这里我们重点说下**externalNativeBuild**
 
-**(****二****) externalNativeBuild**
+**(二) externalNativeBuild**
 
-我们在build.gradle里面看到，有两个地方用到了externalNativeBuild，一个是在defaultConfig里面，是一个是在defaultConfig外面。
+externalNativeBuild里面的cmake指明了CMakeList.txt的路径
 
-·    在defaultConfig外面的externalNativeBuild里面的cmake指明了CMakeList.txt的路径(在本项目下，和是build.gradle在同一个目录里面)。
+[Android NDK-CMake文档](https://link.jianshu.com/?t=https%3A%2F%2Fdeveloper.android.com%2Fndk%2Fguides%2Fcmake.html)
 
-·    在defaultConfig里面的externalNativeBuild里面的cmake主要填写的是CMake的命令参数。即由arguments中的参数最后转化成一个可执行的CMake的命令，可以在
-
-defaultConfig外面的 externalNativeBuild - cmake，指明了 CMakeList.txt 的路径；
- defaultConfig 里面的 externalNativeBuild - cmake，主要填写 CMake 的命令参数。即由 arguments 中的参数最后转化成一个可执行的 CMake 的命令，可以在 app/externalNativeBuild/cmake/debug/{abi}/cmake_build_command.txt中查到。如下
- 路径位置如下图：
-
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image024.png)
-
-路径.png
-
-内容如下：
-
-arguments : 
-
--H/Users/gebilaolitou/Desktop/codeLib/CMakeNDKDemo/app
-
--B/Users/gebilaolitou/Desktop/codeLib/CMakeNDKDemo/app/.externalNativeBuild/cmake/debug/x86
-
--DANDROID_ABI=x86
-
--DANDROID_PLATFORM=android-23
-
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/gebilaolitou/Desktop/codeLib/CMakeNDKDemo/app/build/intermediates/cmake/debug/obj/x86
-
--DCMAKE_BUILD_TYPE=Debug
-
--DANDROID_NDK=/Users/gebilaolitou/Library/Android/sdk/ndk-bundle
-
--DCMAKE_CXX_FLAGS=
-
--DCMAKE_TOOLCHAIN_FILE=/Users/gebilaolitou/Library/Android/sdk/ndk-bundle/build/cmake/android.toolchain.cmake
-
--DCMAKE_MAKE_PROGRAM=/Users/gebilaolitou/Library/Android/sdk/cmake/3.6.4111459/bin/ninja
-
--GAndroid Gradle - Ninja
-
-jvmArgs : 
-
-更多的可以填写的命令参数和含义可以参见[Android NDK-CMake文档](https://link.jianshu.com/?t=https%3A%2F%2Fdeveloper.android.com%2Fndk%2Fguides%2Fcmake.html)
-
-ok上面既然提到了CMakeLists.txt，那我们就来看下CMakeLists.txt
-
-**(****三****) CMakeLists.txt**
+**(三) CMakeLists.txt**
 
 CMakeLists.txt这个文件主要定义了哪些文件需要编译，以及和其他库的关系等，那让我们来看下我们项目中的CMakeLists.txt的内容
 
-\# For more information about using CMake with Android Studio, read the
+```
+# For more information about using CMake with Android Studio, read the
+# documentation: https://d.android.com/studio/projects/add-native-code.html
 
-\# documentation: https://d.android.com/studio/projects/add-native-code.html
+# Sets the minimum version of CMake required to build the native library.
 
- 
+cmake_minimum_required(VERSION 3.18.1)
 
-\# Sets the minimum version of CMake required to build the native library.
+# Declares and names the project.
 
- 
+project("ndkdemocmake")
 
-cmake_minimum_required(VERSION 3.4.1)
-
- 
-
-\# Creates and names a library, sets it as either STATIC
-
-\# or SHARED, and provides the relative paths to its source code.
-
-\# You can define multiple libraries, and CMake builds them for you.
-
-\# Gradle automatically packages shared libraries with your APK.
-
- 
+# Creates and names a library, sets it as either STATIC
+# or SHARED, and provides the relative paths to its source code.
+# You can define multiple libraries, and CMake builds them for you.
+# Gradle automatically packages shared libraries with your APK.
 
 add_library( # Sets the name of the library.
+        ndkdemocmake
 
-​       native-lib
+        # Sets the library as a shared library.
+        SHARED
 
- 
+        # Provides a relative path to your source file(s).
+        native-lib.cpp)
 
-​       \# Sets the library as a shared library.
-
-​       SHARED
-
- 
-
-​       \# Provides a relative path to your source file(s).
-
-​       src/main/cpp/native-lib.cpp )
-
- 
-
-\# Searches for a specified prebuilt library and stores the path as a
-
-\# variable. Because CMake includes system libraries in the search path by
-
-\# default, you only need to specify the name of the public NDK library
-
-\# you want to add. CMake verifies that the library exists before
-
-\# completing its build.
-
- 
+# Searches for a specified prebuilt library and stores the path as a
+# variable. Because CMake includes system libraries in the search path by
+# default, you only need to specify the name of the public NDK library
+# you want to add. CMake verifies that the library exists before
+# completing its build.
 
 find_library( # Sets the name of the path variable.
+        log-lib
 
-​       log-lib
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        log)
 
- 
-
-​       \# Specifies the name of the NDK library that
-
-​       \# you want CMake to locate.
-
-​       log )
-
- 
-
-\# Specifies libraries CMake should link to your target library. You
-
-\# can link multiple libraries, such as libraries you define in this
-
-\# build script, prebuilt third-party libraries, or system libraries.
-
- 
+# Specifies libraries CMake should link to your target library. You
+# can link multiple libraries, such as libraries you define in this
+# build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
+        ndkdemocmake
 
-​            native-lib
+        # Links the target library to the log library
+        # included in the NDK.
+        ${log-lib})
+```
 
- 
 
-​            \# Links the target library to the log library
-
-​            \# included in the NDK.
-
-​            ${log-lib} )
-
-上面很多是注释，我们除去注释来个"精简干练版"的如下：
-
-cmake_minimum_required(VERSION 3.4.1)
-
- 
-
-add_library( # Sets the name of the library.
-
-​       native-lib
-
- 
-
-​       \# Sets the library as a shared library.
-
-​       SHARED
-
- 
-
-​       \# Provides a relative path to your source file(s).
-
-​       src/main/cpp/native-lib.cpp )
-
- 
-
- 
-
-find_library( # Sets the name of the path variable.
-
-​       log-lib
-
- 
-
-​       \# Specifies the name of the NDK library that
-
-​       \# you want CMake to locate.
-
-​       log )
-
- 
-
-target_link_libraries( # Specifies the target library.
-
-​            native-lib
-
- 
-
-​            \# Links the target library to the log library
-
-​            \# included in the NDK.
-
-​            ${log-lib} )
 
 CMakeLists.txt我们看到这里主要是分为四个部分，下面我们就依次来看下
 
-·    cmake_minimum_required(VERSION 3.4.1)：指定CMake的最小版本
+- cmake_minimum_required(VERSION 3.18.1)：指定CMake的最小版本
 
-·    add_library：创建一个静态或者动态库，并提供其关联的源文件路径，开发者可以定义多个库，CMake会自动去构建它们。Gradle可以自动将它们打包进APK中。
+- add_library：创建一个静态或者动态库，并提供其关联的源文件路径，开发者可以定义多个库，CMake会自动去构建它们。Gradle可以自动将它们打包进APK中。
 
-·    第一个参数——native-lib：是库的名称
+```
+第一个参数——native-lib：是库的名称
 
-·    第二个参数——SHARED：是库的类别，是动态的还是静态的
+第二个参数——SHARED：是库的类别，是动态的还是静态的
 
-·    第三个参数——src/main/cpp/native-lib.cpp：是库的源文件的路径
+第三个参数——src/main/cpp/native-lib.cpp：是库的源文件的路径
+```
 
-·    find_library：找到一个预编译的库，并作为一个变量保存起来。由于CMake在搜索库路径的时候会包含系统库，并且CMake会检查它自己之前编译的库的名字，所以开发者需要保证开发者自行添加的库的名字的独特性。
+- find_library：找到一个预编译的库，并作为一个变量保存起来。由于CMake在搜索库路径的时候会包含系统库，并且CMake会检查它自己之前编译的库的名字，所以开发者需要保证开发者自行添加的库的名字的独特性。
 
-·    第一个参数——log-lib：设置路径变量的名称
 
-·    第一个参数—— log：指定NDK库的名子，这样CMake就可以找到这个库
+```
+第一个参数——log-lib：设置路径变量的名称
+第二个参数—— log：指定NDK库的名子，这样CMake就可以找到这个库
+```
 
-·    target_link_libraries：指定CMake链接到目标库。开发者可以链接多个库，比如开发者可以在此定义库的构建脚本，并且预编译第三方库或者系统库。
+- target_link_libraries：指定CMake链接到目标库。开发者可以链接多个库，比如开发者可以在此定义库的构建脚本，并且预编译第三方库或者系统库。
 
-·    第一个参数——native-lib：指定的目标库
+```
+第一个参数——native-lib：指定的目标库
+第二个参数——${log-lib}：将目标库链接到NDK中的日志库，
+```
 
-·    第一个参数——${log-lib}：将目标库链接到NDK中的日志库，
+
 
 这其实是一个最基础的CMakeLists.txt ，其实CMakeLists.txt里面可以非常强大，比如自定义命令、查找文件、头文件包含、设置变量等等。这里推荐**CMake**的[官网文档](https://link.jianshu.com/?t=https%3A%2F%2Fcmake.org%2Fdocumentation%2F)，不过是英文的，不好阅读，大家可以参考中文的[CMake手册](https://link.jianshu.com/?t=https%3A%2F%2Fwww.zybuluo.com%2Fkhan-lau%2Fnote%2F254724)
 
-上面分析完毕CMakeLists.txt，我们就大致的知道了CMake整体的构建流程，那我们就来看下
+上面分析完毕CMakeLists.txt，我们就大致的知道了CMake整体的构建流程。
 
-**(****四****) CMake****的运转流程**
+
+
+**(四) CMake的运转流程**
 
 ·    1、Gradle 调用外部构建脚本CMakeLists.txt
 
@@ -823,7 +655,7 @@ PS:这里注意一点就是：Instant Run 与使用原生的项目不兼容
 
 如果想看Gradle是否将原生库打包到APK中，可以使用Analyze APK来检测。
 
-**七、****CMake****的应用**
+**七、CMake的应用**
 
 我们在做日常需求的时候，往往会遇到一个问题，即在已有的项目中，添加C库，这样就不能通过上面的**创建**流程，来使用CMake。那怎么办？
 
@@ -1059,7 +891,7 @@ public class NDKTools {
 
 结果3.png
 
-**八、使用****experimental-plugin****插件简介**
+**八、使用experimental-plugin插件简介**
 
 我们在使用NDK开发有件比较麻烦的事情，就是编写Android.mk和Application.mk，Android Studio的插件gradle-experimental就是用来解决这个问题的。所以使用gradle-experimental插件可以不用再编写.mk文件情况下进行NDK开发。
 
