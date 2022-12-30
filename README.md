@@ -355,8 +355,6 @@ public class NDKTools {
 
 最后run一下即可，如下图
 
- 
-
 ![img](img/clip_image014.png)
 
 
@@ -365,6 +363,7 @@ public class NDKTools {
 
 有的同学在运行的时候，会报如下错误：
 
+```
 Error:Execution failed for task ':app:compileDebugNdk'.
 
 \> Error: Your project contains C++ files but it is not using a supported native build system.
@@ -376,12 +375,17 @@ Error:Execution failed for task ':app:compileDebugNdk'.
  Alternatively, you can use the experimental plugin:
 
   https://developer.android.com/r/tools/experimental-plugin.html
+```
 
 首先把检查你项目中gradle.properties文件后面加上一句
 
+```
 Android.useDeprecatedNdk=true 
+```
 
-**四、传统方式的****so****文件**
+
+
+**四、传统方式的so文件**
 
 大家可能会有疑问，那so去哪里了，我们平时使用第三方的sdk的so的时候，会要粘贴复制到项目里面，而我们上所述整个过程，并没有出现.so这个文件，那么这个.so去哪里了？
 
@@ -389,11 +393,13 @@ Android.useDeprecatedNdk=true
 
  
 
-![img](file:////Users/apple/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image015.png)
+![img](img/clip_image015.png)
 
 上面这套方式是传统的Android Studio的模式，那有没有更简单的方式，是有的，那下面我们就继续来看下
 
-**五、通过****CMake****工具****demo****演示流程**
+
+
+**五、通过CMake工具demo演示流程**
 
 **(****一****)** **首先确保你本地有****CMake****，我们来看下****SDK Tools**
 
